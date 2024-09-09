@@ -20,7 +20,11 @@ app.options('*', cors());
 
 // Настройка POST-запроса — JSON
 app.use(express.json());
-
+app.use(express.static(path.join(__dirname, '../front/dist')));
+// Все остальные запросы отправляем на фронтенд
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../front/dist/index.html'));
+  });
 // Настройка БД
 const mongoose = require('mongoose');
 const mongo_Url = process.env.MONGODB_URL;
