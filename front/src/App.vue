@@ -40,7 +40,7 @@ export default {
 
 
 
-    async loadSmartfones() {
+   /*  async loadSmartfones() {
       let response = await axios.get(`/api/all`, {
         params: {
           category: this.category,
@@ -54,8 +54,41 @@ export default {
       }));
       this.syncSmartfonesWithAdded();
       this.syncSmartfonesWithFavorites();
-    },
-    
+    }, */
+    async loadSmartfones() {
+  try {
+    let response = await axios.get(`/api/all`, {
+      params: {
+        category: this.category,
+        model: this.model,
+      },
+    });
+
+    // Проверка на тип данных
+    if (!Array.isArray(response.data)) {
+      throw new TypeError('Invalid data format: expected an array');
+    }
+
+    this.smartfones = response.data.map((smartfone) => ({
+      ...smartfone,
+      isFavorite: false,
+      isAdded: false,
+    }));
+
+    this.syncSmartfonesWithAdded();
+    this.syncSmartfonesWithFavorites();
+  } catch (error) {
+    console.error('Error loading smartfones:', error);
+    // Дополнительная обработка ошибок, например, отображение сообщения пользователю
+    this.handleError(error)
+  }
+},
+
+// Пример метода для обработки ошибок
+  handleError(error) {
+  // Здесь можно добавить логику для отображения сообщения пользователю
+  alert('An error occurred while loading smartfones. Please try again later.');
+},
     fetchFavorites(id) {
       for (let i = 0; i < this.smartfones.length; i++) {
         if (this.smartfones[i]._id === id) {
