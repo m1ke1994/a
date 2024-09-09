@@ -41,7 +41,7 @@ export default {
 
 
     async loadSmartfones() {
-      let response = await axios.get(`/all`, {
+      let response = await axios.get(`/api/all`, {
         params: {
           category: this.category,
           model: this.model,
